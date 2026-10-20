@@ -1,5 +1,5 @@
 """Interview-ready equity analytics dashboard. Run: streamlit run app.py."""
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 import json
 
 import numpy as np
@@ -53,11 +53,11 @@ with st.sidebar:
     st.markdown("### EQUITY LENS")
     st.caption("A reproducible market analytics study")
     with st.form("analysis_controls"):
-        source = st.radio("Data source", ["Offline snapshot", "Yahoo Finance"])
+        source = st.radio("Data source", ["Offline snapshot", "Yahoo Finance"], index=1)
         selected = st.multiselect("Equities", ["AAPL", "MSFT", "NVDA", "AMZN", "GOOGL"], default=["AAPL", "MSFT", "NVDA", "AMZN", "GOOGL"])
         st.caption("SPY is included as the benchmark in every comparison.")
         start = st.date_input("Start date", base.Date.min().date())
-        end = st.date_input("End date (inclusive)", base.Date.max().date())
+        end = st.date_input("End date (inclusive)", datetime.now(timezone.utc).date())
         risk_free_pct = st.number_input("Annual risk-free assumption (%)", 0.0, 15.0, 0.0, 0.25)
         st.form_submit_button("Update analysis", type="primary", width="stretch")
     st.divider()
@@ -68,8 +68,19 @@ if not selected or start >= end:
     st.info("Choose at least one equity and an end date after the start date.")
     st.stop()
 symbols = selected + ["SPY"]
+requested_source = source
+prices, audit = base, base_audit
+if source == "Yahoo Finance":
+    try:
+        prices, audit = live_prices(symbols, start, end)
+    except Exception:
+        source = "Offline snapshot"
+        st.warning(
+            "Could not refresh Yahoo Finance data. Showing the bundled offline "
+            f"snapshot through {base.Date.max():%d %b %Y} instead. "
+            "Try reopening the app later to retry the download."
+        )
 try:
-    prices, audit = (base, base_audit) if source == "Offline snapshot" else live_prices(symbols, start, end)
     filtered = prices.loc[prices.Ticker.isin(symbols) & prices.Date.between(pd.Timestamp(start), pd.Timestamp(end))]
     close, dropped = close_matrix(filtered, symbols)
 except Exception as exc:
@@ -83,7 +94,9 @@ st.caption("RESEARCH / EQUITIES / HISTORICAL ANALYSIS")
 st.title("Performance tells half the story.")
 st.markdown("Explore the returns, risks and predictability of five technology stocks against the S&P 500 ETF benchmark.")
 st.caption(f"{source}  ·  {close.index.min():%d %b %Y} — {close.index.max():%d %b %Y}  ·  {len(close):,} common sessions  ·  USD")
-if source == "Offline snapshot" and (start < base.Date.min().date() or end > base.Date.max().date()):
+if source == "Yahoo Finance":
+    st.caption("Latest available daily prices, requested automatically on opening. Downloads are cached for up to one hour; today's session may not yet be available.")
+elif requested_source == "Offline snapshot" and (start < base.Date.min().date() or end > base.Date.max().date()):
     st.info("The offline snapshot covers only the actual dates shown above. Use Yahoo Finance to request a different period.")
 
 leader = metrics.loc[selected, "Total return"].idxmax()

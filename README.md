@@ -38,7 +38,9 @@ python -m venv .venv
 
 On macOS/Linux, replace `.\.venv\Scripts\python.exe` with `.venv/bin/python`.
 
-The dashboard defaults to **Offline snapshot**. Change the equities, dates and risk-free assumption, then click **Update analysis**. Select **Yahoo Finance** to request historical data from the live provider; this requires network access and provider availability. Downloads are cached for one hour and do not replace the bundled snapshot.
+The dashboard defaults to **Yahoo Finance** and requests daily historical data through today's date (UTC) automatically when opened. Downloads are cached for one hour, so reopening or interacting with the app during that hour can reuse a recent download. The latest available session is shown in the dashboard; today's session may not yet be available. This is daily historical data, not a real-time quote feed.
+
+If the provider is unavailable, the app displays a warning and falls back to the bundled **Offline snapshot**, clearly showing its older coverage dates. You can also select **Offline snapshot** to work without network access. Change the equities, dates and risk-free assumption, then click **Update analysis**. Automatic downloads do not replace the versioned snapshot or regenerate the fixed research reports.
 
 The original commands `streamlit run Stocks.py` and `streamlit run Stockprice.py` forward to the supported app.
 
