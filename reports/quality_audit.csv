@@ -1,0 +1,9 @@
+Check,Rows
+Input rows,7530
+Invalid date / ticker,0
+Missing / non-finite numeric fields,0
+Nonpositive price / negative volume,0
+Inconsistent OHLC bar,0
+Invalid rows removed (unique),0
+Duplicate keys removed,0
+Output rows,7530

@@ -1,0 +1,57 @@
+{
+  "provider": "Yahoo Finance via yfinance",
+  "source_url": "https://finance.yahoo.com/",
+  "yfinance_version": "1.7.0",
+  "retrieved_at_utc": "2026-10-20T16:29:21.651364+00:00",
+  "requested_start": "2021-01-01",
+  "requested_end_exclusive": "2026-01-01",
+  "auto_adjust": true,
+  "currency": "USD",
+  "volume": "Provider-reported share volume; not a dollar liquidity measure",
+  "tickers": [
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "AMZN",
+    "GOOGL",
+    "SPY"
+  ],
+  "rows": 7530,
+  "first_date": "2021-01-04",
+  "last_date": "2025-12-31",
+  "sha256": "220373090cb944593fe99be4e4e0300a22c73488d1024efd36698525c720dfa4",
+  "quality_audit": [
+    {
+      "Check": "Input rows",
+      "Rows": 7530
+    },
+    {
+      "Check": "Invalid date / ticker",
+      "Rows": 0
+    },
+    {
+      "Check": "Missing / non-finite numeric fields",
+      "Rows": 0
+    },
+    {
+      "Check": "Nonpositive price / negative volume",
+      "Rows": 0
+    },
+    {
+      "Check": "Inconsistent OHLC bar",
+      "Rows": 0
+    },
+    {
+      "Check": "Invalid rows removed (unique)",
+      "Rows": 0
+    },
+    {
+      "Check": "Duplicate keys removed",
+      "Rows": 0
+    },
+    {
+      "Check": "Output rows",
+      "Rows": 7530
+    }
+  ]
+}
