@@ -6,6 +6,8 @@ A reproducible Python and SQL project comparing five technology stocks with SPY.
 
 **Stack:** Python · Pandas · NumPy · SQLite · Plotly · Streamlit · scikit-learn
 
+**Live Website URL**: https://stockpricepredictin.streamlit.app/
+
 ![Growth of $100 and historical drawdowns](reports/performance.png)
 
 ## Questions
